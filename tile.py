@@ -26,29 +26,6 @@ class Tile:
             if not res.available():
                 res.cooldown -= 1
     
-    def harvest(self, resource):
-        available = self.available_resources()
-        lg.info(f"Available ressources: {[str(res) for res in available]} Looking for: {type}")
-
-        resource = self.get_resource(type)
-
-        if resource:
-            resource.harvest()
-            lg.info(f"Harvested {resource} from {self.x}, {self.y}")
-            return True
-        
-        lg.error("Ressource not available")
-        return False
-    
-    
-    
-    def get_resource(self, type):
-        resources = [res for res in self.available_resources() if res.resource.name == type.name]
-        lg.info(f"Found resources: {[str(res) for res in resources]}")
-        if resources:
-            return resources[0]
-        return None
-    
     def set_building(self, building):
         self.building = building
     

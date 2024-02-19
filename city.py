@@ -1,9 +1,12 @@
+from action import Harvest
+
 class City:
     def __init__(self, map, pos, realm): 
         self.name = "City"
         self.population = 1
         self.realm = realm
         self.map = map
+        self.harvest_action = Harvest(self)
         self.found(pos)
 
 

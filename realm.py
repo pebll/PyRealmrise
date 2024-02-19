@@ -13,13 +13,7 @@ class Realm:
         self.cities.append(city)
     
     def get_harvestable_resources(self):
-        return sum([city.get_harvestable_resources() for city in self.cities], [])
-            
-    
-    def harvest(self, resource):
-        tile = resource.tile
-        if tile.harvest(resource):
-            self.resources[resource.name] += 1
+        return sum([city.get_harvestable_resources() for city in self.cities], [])          
         
     def info(self):
         info = ""
