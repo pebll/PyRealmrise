@@ -47,7 +47,6 @@ class Action:
     def to_list_cost(self, cost):
         return [str(res) for res in cost]
     
-
 class Harvest(Action):
     ## harvests format:
     # [TileResource, TileResource, ...]
@@ -108,4 +107,21 @@ class AcquireTile(Action):
     
     def resolve(self, tile):
         self.city.acquire_tile(tile)
+
+class IncreasePop(Action):
+    def __init__(self, realm, city):
+        super().__init__(realm, name = "IncreasePop")
+        self.city = city
+
+    def get_cost(self):
+        return self.city.increase_pop_cost()
+    
+    def is_valid(self):
+        if super().is_valid() == False:
+            return False
+        self.logger.info(f"[VALID] Increasing population")
+        return True
+    
+    def resolve(self):
+        self.city.increase_population()
 

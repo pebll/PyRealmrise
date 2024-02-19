@@ -1,5 +1,8 @@
 from action import Harvest
 import logging as lg
+from random import choice
+from constants import RESSOURCES
+
 
 class City:
     def __init__(self, map, pos, realm):    
@@ -11,6 +14,7 @@ class City:
         self.harvest_action = Harvest(self.realm, self)
         self.tiles = []
         self.found(pos)
+        self.pop_costs = [[choice(RESSOURCES) for _ in range((i+1)*2)] for i in range(10)]
         
 
     def found(self, pos):
@@ -36,6 +40,13 @@ class City:
         self.tiles.append(tile)
         tile.set_realm(self.realm)
         self.logger.info(f"Acquired tile {tile}")
-        
+    
+    def increase_population(self):
+        self.population += 1
+        self.logger.info(f"Population increased to {self.population}")
+    
+    def increase_pop_cost(self):
+        return self.pop_costs[self.population-1]
+    
     def __str__(self):
         return f'{self.name}: {self.population}'
