@@ -51,6 +51,8 @@ class City:
         for tile in own_tiles:
             x, y = tile.x, tile.y
             for neighbour in [self.map.tile((x+1,y)), self.map.tile((x-1,y)), self.map.tile((x,y+1)), self.map.tile((x,y-1))]:
+                if not neighbour:
+                    continue
                 if neighbour.realm != self.realm and neighbour not in neighbours:
                     neighbours.append(neighbour)
         return neighbours

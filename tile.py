@@ -22,7 +22,7 @@ class Tile:
         self.special_cost = [choice(self.type.resources) for _ in range(10)]
     
     def get_cost(self, distance):
-        return self.base_cost[:distance] + self.special_cost[:distance//2]
+        return self.base_cost[:distance-1] + self.special_cost[:1+distance//3]
 
     def available_resources(self):
         return [resource for resource in self.resources if resource.available()]

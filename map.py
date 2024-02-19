@@ -10,6 +10,8 @@ class Map:
     
     def tile(self, pos):
         x, y = pos
+        if x < 0 or x >= self.width or y < 0 or y >= self.height:
+            return None
         return self.map[x][y]
     
     def tiles(self):
