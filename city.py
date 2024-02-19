@@ -1,4 +1,4 @@
-from action import Harvest
+from action import Harvest, AcquireTile, IncreasePop
 import logging as lg
 from random import choice
 from constants import RESSOURCES
@@ -11,7 +11,10 @@ class City:
         self.population = 1
         self.realm = realm
         self.map = map
-        self.harvest_action = Harvest(self.realm, self)
+        self.actions = {}
+        self.actions["harvest"] = Harvest(self.realm, self)
+        self.actions["acquire_tile"] = AcquireTile(self.realm, self)
+        self.actions["increase_pop"] = IncreasePop(self.realm, self)
         self.tiles = []
         self.found(pos)
         self.pop_costs = [[choice(RESSOURCES) for _ in range((i+1)*2)] for i in range(10)]
@@ -27,7 +30,8 @@ class City:
         self.tile.set_realm(self.realm)
 
     def tick(self):
-        self.harvest_action.tick()
+        for action in self.actions.values():
+            action.tick()
 
     def get_harvestable_resources(self):
         return sum([[res for res in tile.available_resources()] for tile in self.tiles], [])

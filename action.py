@@ -13,7 +13,7 @@ class Action:
         self.uses_left = uses_per_turn
         self.uses_per_turn = uses_per_turn
         
-    def get_cost(self):
+    def get_cost(self, **kwargs):
         return None
     
     def tick(self):
@@ -23,7 +23,7 @@ class Action:
         is_valid = self.is_valid(**kwargs)
         if is_valid:
             self.uses_left -= 1
-            self.realm.pay(self.get_cost())
+            self.realm.pay(self.get_cost(**kwargs))
             self.resolve(**kwargs)
             return True
         return False
