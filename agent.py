@@ -1,6 +1,6 @@
 import logging as lg
 from logging_config import configure_logging
-from utility import str_list
+from utility import str_list, to_dict_cost
 
 class Agent:
     def __init__(self, realm):
@@ -23,17 +23,19 @@ class TestAgent(Agent):
             if self.realm.can_afford(city.increase_pop_cost()):
                 self.logger.info(f"Chose to increase population")
                 self.actions.append((city.actions["increase_pop"], {}))
+                return True
 
     def choose_tile(self):
         for city in self.realm.cities:
-            for tile in city.tiles:
+            for tile in city.acquirable_tiles():
                 if self.realm.can_afford(tile.get_cost(tile.distance(city.tile))):
                     self.logger.info(f"Chose to acquire tile {tile}")
                     self.actions.append((city.actions["acquire_tile"], {"tile": tile}))
+    
     def choose_actions(self):
         self.actions = []
-        self.choose_pop()
-        self.choose_tile()
+        if not self.choose_pop():
+            self.choose_tile()
         self.choose_harvests()
         return self.actions
     

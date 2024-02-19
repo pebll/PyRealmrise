@@ -1,6 +1,8 @@
 from city import City
 from constants import RESSOURCES
 import logging as lg
+from utility import to_dict_cost
+
 
 class Realm:
     def __init__(self, map):
@@ -24,6 +26,8 @@ class Realm:
     def can_afford(self, cost):
         if cost == None:
             return True
+        if type(cost) == list:
+            cost = to_dict_cost(cost)
         return all([self.resources[res] >= cost[res] for res in cost])
 
     def pay(self, cost):

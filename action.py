@@ -1,6 +1,6 @@
 import logging as lg
 from logging_config import configure_logging
-from utility import str_list
+from utility import str_list, to_dict_cost
 from constants import RESSOURCES
 from random import choice
 
@@ -28,24 +28,18 @@ class Action:
             return True
         return False
 
-    def resolve(self):
+    def resolve(self, **kwargs):
         self.logger.info(f"Resolving {self.name}")
 
-    def is_valid(self):
+    def is_valid(self, **kwargs):
         self.logger.info(f"Checking if {self.name} is valid")
         if self.uses_left <= 0:
             self.logger.error(f"[INVALID] Not enough uses left")
             return False
-        if not self.realm.can_afford(self.get_cost()):
+        if not self.realm.can_afford(self.get_cost(**kwargs)):
             self.logger.error(f"[INVALID] Not enough resources")
             return False
         return True
-    
-    def to_dict_cost(self, cost):
-        return {str(res): cost.count(res) for res in RESSOURCES}
-    
-    def to_list_cost(self, cost):
-        return [str(res) for res in cost]
     
 class Harvest(Action):
     ## harvests format:
@@ -54,12 +48,11 @@ class Harvest(Action):
         super().__init__(realm, name = "Harvest")
         self.city = city
 
-    def is_valid(self, harvests):
-        left_tiles = list(self.city.tiles)
-
-        if super().is_valid() == False:
+    def is_valid(self, **kwargs):
+        if super().is_valid(**kwargs) == False:
             return False
-        
+        harvests = kwargs["harvests"]
+        left_tiles = list(self.city.tiles)
         if len(harvests) > self.city.population:
             self.logger.error(f"[INVALID]Not enough population to harvest {harvests}")
             return False
@@ -79,7 +72,8 @@ class Harvest(Action):
         self.logger.info(f"[VALID] Harvesting {str_list(harvests)}")
         return True
     
-    def resolve(self, harvests):
+    def resolve(self, **kwargs):
+        harvests = kwargs["harvests"]
         for resource in harvests:
             self.city.harvest(resource)
             self.logger.info(f"Harvested {resource} from {resource.tile}")
@@ -89,12 +83,14 @@ class AcquireTile(Action):
         super().__init__(realm, name = "AcquireTile")
         self.city = city
 
-    def get_cost(self, tile):
+    def get_cost(self, **kwargs):
+        tile = kwargs["tile"]
         dist = self.city.tile.distance(tile)
-        return self.to_dict_cost(tile.get_cost(dist))
+        return to_dict_cost(tile.get_cost(dist))
     
-    def is_valid(self, tile):
-        if super().is_valid() == False:
+    def is_valid(self, **kwargs):
+        tile = kwargs["tile"]
+        if super().is_valid(**kwargs) == False:
             return False
         if tile in self.city.tiles:
             self.logger.error(f"[INVALID] Tile {tile} already acquired by City")
@@ -105,7 +101,8 @@ class AcquireTile(Action):
         self.logger.info(f"[VALID] Acquiring {tile}")
         return True
     
-    def resolve(self, tile):
+    def resolve(self, **kwargs):
+        tile = kwargs["tile"]
         self.city.acquire_tile(tile)
 
 class IncreasePop(Action):
@@ -114,7 +111,7 @@ class IncreasePop(Action):
         self.city = city
 
     def get_cost(self):
-        return self.city.increase_pop_cost()
+        return to_dict_cost(self.city.increase_pop_cost())
     
     def is_valid(self):
         if super().is_valid() == False:

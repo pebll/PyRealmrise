@@ -33,15 +33,15 @@ class Game():
         self.logger.info(self.realm.info())
         self.logger.info(self.map)
         self.logger.info("-"*50)
-        for i in range(5):
+        for i in range(20):
             self.logger.info(f"Turn {i+1}:")
             self.loop()
             self.logger.info(self.realm.info())
             self.logger.info("-"*50)
         self.logger.info(f"City Tiles: {[str(tile) for tile in self.realm.cities[0].tiles]}")
         self.logger.info(self.map)
-        for tile in self.map.tiles():
-            self.logger.info(f"Tile {tile} costs: {str_list(tile.get_cost(tile.distance(self.realm.cities[0].tile)))}")
+        for tile in self.realm.cities[0].acquirable_tiles():
+            self.logger.debug(f"Tile {tile} costs: {str_list(tile.get_cost(tile.distance(self.realm.cities[0].tile)))}")
         self.logger.info("Game ended")
     
 
