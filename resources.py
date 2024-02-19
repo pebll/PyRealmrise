@@ -7,3 +7,6 @@ class Resource(Enum):
     WOOD = 3
     SNOW = 4
     SAND = 5
+
+    def __str__(self):
+        return self.name

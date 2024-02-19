@@ -28,7 +28,6 @@ class Tile:
         self.y = y
         self.type = choice(list(TileTypes))
         self.resources = self.type.value.resources
-        print(self.resources)
         self.cooldowns = [0 for _ in self.resources]
         self.realm = None
     

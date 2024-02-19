@@ -17,6 +17,9 @@ class City:
         for tile in self.tiles:
             self.map.tile(tile).set_realm(self.realm)
 
+    def get_harvestable_resources(self):
+        return sum([self.map.tile(tile).available_resources() for tile in self.tiles], [])
+
 
     def __str__(self):
         return f'{self.name}: {self.population}'

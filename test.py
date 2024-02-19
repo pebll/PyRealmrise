@@ -1,30 +1,4 @@
-import map
+from game import Game
 
-m = map.Map(5, 5)
-print(m)
-
-tile1 = m.map[0][0]
-print(tile1.cooldowns)
-print(tile1.available_resources())
-print(f"Harvesting: {tile1.available_resources()[0].name}")
-tile1.harvest(tile1.available_resources()[0])
-print(tile1.cooldowns)
-tile1.tick()
-print("tick")
-print(tile1.available_resources())
-print(f"Harvesting: {tile1.available_resources()[0].name}")
-print(tile1.harvest(tile1.available_resources()[0]))
-print(tile1.available_resources())
-print(tile1.cooldowns)
-tile1.tick()
-print("tick")
-print(tile1.available_resources())
-print(tile1.cooldowns)
-tile1.tick()
-print("tick")
-print(tile1.available_resources())
-print(tile1.cooldowns)
-tile1.tick()
-print("tick")
-print(tile1.available_resources())
-print(tile1.cooldowns)
+game = Game()
+game.start()

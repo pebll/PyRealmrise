@@ -10,4 +10,6 @@ class Game():
     def tick(self):
         self.map.tick()
 
-    
+    def start(self):
+        print(self.map)
+        print("Harvestable resources: ", str(self.realm.get_harvestable_resources()))
