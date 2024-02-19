@@ -6,9 +6,8 @@ class City:
         self.population = 1
         self.realm = realm
         self.map = map
-        self.harvest_action = Harvest(self)
+        self.harvest_action = Harvest(self.realm, self)
         self.found(pos)
-
 
     def found(self, pos):
         self.tile = self.map.tile(pos)
@@ -19,6 +18,9 @@ class City:
             tile.set_realm(self.realm)
         self.tile.set_realm(self.realm)
 
+    def tick(self):
+        self.harvest_action.tick()
+        
     def get_harvestable_resources(self):
         return sum([[res for res in tile.available_resources()] for tile in self.tiles], [])
 
