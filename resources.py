@@ -3,7 +3,7 @@
 class Resource():
     def __init__(self, name):
         self.name = name
-        self.cooldown = 5
+        self.cooldown = 3
 
     def __str__(self):
         return self.name
