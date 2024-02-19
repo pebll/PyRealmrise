@@ -6,7 +6,7 @@ class Realm:
         self.name = "Realm"
         self.cities = []
         self.map = map
-        self.resources = {resource: 0 for resource in Resource}
+        self.resources = {resource: 0 for resource in Resource.__members__.values()}
     
     def found_city(self, pos):
         city = City(self.map, pos, self)
@@ -17,7 +17,15 @@ class Realm:
             
     
     def harvest(self, tile, resource):
-        self.resources[resource] += 1
-
-
+        if tile.harvest(resource):
+            self.resources[resource] += 1
+        
+    def info(self):
+        info = ""
+        info += f"Realm: {self.name}\n"
+        info += f"Resources: {[f'{res} : {count}' for (res, count) in self.resources.items()]}\n"
+        info += f"Cities: {[str(city) for city in self.cities]}\n"
+        info += f"Harvestable resources: {sum([[str(res[1])] for res in self.get_harvestable_resources()], [])}\n"
+        return info
+    
         

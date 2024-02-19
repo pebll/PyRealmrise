@@ -1,5 +1,8 @@
 from random import choice
+from typing import Any
 from tile_types import TileTypes
+from city import City
+from termcolor import colored
 
 class Map:
     def __init__(self, width, height):
@@ -17,7 +20,7 @@ class Map:
                 tile.tick()
     
     def __str__(self):
-        return "\n".join(" ".join(str(tile) for tile in row) for row in self.map)
+        return "\n".join(" ".join(tile.short() for tile in row) for row in self.map)
     
 
 
@@ -28,24 +31,33 @@ class Tile:
         self.y = y
         self.type = choice(list(TileTypes))
         self.resources = self.type.value.resources
-        self.cooldowns = [0 for _ in self.resources]
+        self.resources = [[res, 0] for res in self.resources]
         self.realm = None
+        self.building = None
     
-    def available_resources(self):
-        return [ressource for ressource, cooldown in zip(self.resources, self.cooldowns) if cooldown == 0]
+    def available_resources(self, with_cool_down=False):
+        if with_cool_down:
+            return [[ressource, cooldown] for ressource, cooldown in self.resources if cooldown == 0]
+        return [ressource for ressource, cooldown in self.resources if cooldown == 0]
 
     def tick(self):
-        for i in range(len(self.cooldowns)):
-            if self.cooldowns[i] > 0:
-                self.cooldowns[i] -= 1
+        for res in self.resources:
+            if type(res) == tuple:
+                print(self.x, self.y, res)
+            if res[1] > 0:
+                res[1] -= 1
     
     def harvest(self, ressource):
-        index = self.resources.index(ressource)
-        if self.cooldowns[index] == 0:
-            self.cooldowns[index] = 3
+        available = self.available_resources()
+        print("[INFO] Available ressources: ", available, "Looking for: ", ressource)
+        try:
+            index = self.resources.index([ressource, 0])
+            self.resources[index] = [ressource, 3]
+            print(f"[INFO] Harvested {ressource} from {self.x}, {self.y}")
             return 1
-        print(KeyError("Ressource not available"))
-        return 0
+        except ValueError:
+            print("[ERROR] Ressource not available")
+            return 0
     
     def set_building(self, building):
         self.building = building
@@ -53,6 +65,14 @@ class Tile:
     def set_realm(self, realm):
         self.realm = realm
 
-    def __str__(self):
-        return f"( {self.type} )"
+    def short(self):
+        short = f"( {self.type} )"
+        if type(self.building) == City:
+            short = " [C] "
+        if self.realm:
+            short = colored(short, 'blue', attrs=['bold'])
+        return short
+
+    def __str__(self) -> str:
+        return f"Tile: {self.type.name} at ({self.x}, {self.y}) with {sum([[f'{str(res[0])} ({res[1]})'] for res in self.resources], [])}"
     
