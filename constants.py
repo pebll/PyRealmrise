@@ -1,5 +1,7 @@
 from resources import Resource
 
+
+
 ## Resources
 
 names = ["GRASS", "WATER", "STONE", "WOOD", "SNOW", "SAND"]
@@ -14,6 +16,9 @@ class TileType:
         self.name = name
         self.short = name[0]
         self.resources = resources
+    
+    def __str__(self):
+        return self.short
 
 TILE_TYPES = [TileType("PLAINS", [res_dict["GRASS"], res_dict["GRASS"]]),
                 TileType("FOREST", [res_dict["WOOD"], res_dict["WOOD"]]),

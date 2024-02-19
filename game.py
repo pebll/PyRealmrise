@@ -1,6 +1,7 @@
 from map import Map
 from realm import Realm
 from agent import Agent, TestAgent
+import logging as lg
 
 class Game():
     def __init__(self):
@@ -28,16 +29,17 @@ class Game():
         self.tick_game()
 
     def start(self):
-        print("Starting game")
-        print(self.realm.info())
-        print(self.map)
-        print("-"*50)
+        lg.basicConfig(level=lg.INFO)
+        lg.info("Starting game")
+        lg.info(self.realm.info())
+        lg.info(self.map)
+        lg.info("-"*50)
         for i in range(10):
-            print(f"Turn {i+1}:")
+            lg.info(f"Turn {i+1}:")
             self.loop()
-            print(self.realm.info())
-            print("-"*50)
-        print(f"City Tiles: {[str(tile) for tile in self.realm.cities[0].tiles]}")
-        print(self.map)
-        print("Game ended")
+            lg.info(self.realm.info())
+            lg.info("-"*50)
+        lg.info(f"City Tiles: {[str(tile) for tile in self.realm.cities[0].tiles]}")
+        lg.info(self.map)
+        lg.info("Game ended")
         

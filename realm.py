@@ -19,14 +19,14 @@ class Realm:
     def harvest(self, resource):
         tile = resource.tile
         if tile.harvest(resource):
-            self.resources[str(resource)] += 1
+            self.resources[resource.name] += 1
         
     def info(self):
         info = ""
         info += f"Realm: {self.name}\n"
         info += f"Resources: {[f'{res} : {count}' for (res, count) in self.resources.items()]}\n"
         info += f"Cities: {[str(city) for city in self.cities]}\n"
-        info += f"Harvestable resources: {sum([[str(res)] for res in self.get_harvestable_resources()], [])}\n"
+        info += f"Harvestable resources: {sum([[str(res)] for res in self.get_harvestable_resources()], [])}"
         return info
     
         

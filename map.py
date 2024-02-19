@@ -18,5 +18,5 @@ class Map:
                 tile.tick()
     
     def __str__(self):
-        return "\n".join(" ".join(tile.short() for tile in row) for row in self.map)
+        return "Map:\n" + "\n".join(" ".join(tile.short() for tile in row) for row in self.map)
     

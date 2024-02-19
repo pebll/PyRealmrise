@@ -3,10 +3,11 @@ from termcolor import colored
 from random import choice
 from constants import TILE_TYPES
 from resources import TileResource
-
+import logging as lg
 
 class Tile:
     def __init__(self, x, y, type=None):
+        self.lg = lg.getLogger(f"Tile({x},{y})")
         self.x = x
         self.y = y
 
@@ -27,20 +28,21 @@ class Tile:
     
     def harvest(self, type):
         available = self.available_resources()
-        print("[INFO] Available ressources: ", available, "Looking for: ", type)
+        lg.info(f"Available ressources: {[str(res) for res in available]} Looking for: {type}")
 
         resource = self.get_resource(type)
 
-        if self.get_resource(resource):
+        if resource:
             resource.harvest()
-            print(f"[INFO] Harvested {resource} from {self.x}, {self.y}")
+            lg.info(f"Harvested {resource} from {self.x}, {self.y}")
             return True
         
-        print("[ERROR] Ressource not available")
+        lg.error("Ressource not available")
         return False
     
     def get_resource(self, type):
-        resources = [res for res in self.available_resources() if res.resource == type]
+        resources = [res for res in self.available_resources() if res.resource.name == type.name]
+        lg.info(f"Found resources: {[str(res) for res in resources]}")
         if resources:
             return resources[0]
         return None
