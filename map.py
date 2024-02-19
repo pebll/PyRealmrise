@@ -12,6 +12,9 @@ class Map:
         x, y = pos
         return self.map[x][y]
     
+    def tiles(self):
+        return [tile for row in self.map for tile in row]
+    
     def tick(self):
         for row in self.map:
             for tile in row:

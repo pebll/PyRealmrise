@@ -1,7 +1,7 @@
 from city import City
 from termcolor import colored
 from random import choice
-from constants import TILE_TYPES
+from constants import TILE_TYPES, RESSOURCES
 from resources import TileResource
 import logging as lg
 
@@ -17,7 +17,13 @@ class Tile:
         self.resources = [TileResource(res, self) for res in self.resources]
         self.realm = None
         self.building = None
+
+        self.base_cost = [choice(RESSOURCES) for _ in range(10)]
+        self.special_cost = [choice(self.type.resources) for _ in range(10)]
     
+    def get_cost(self, distance):
+        return self.base_cost[:distance] + self.special_cost[:distance//2]
+
     def available_resources(self):
         return [resource for resource in self.resources if resource.available()]
 
@@ -25,6 +31,9 @@ class Tile:
         for res in self.resources:
             if not res.available():
                 res.cooldown -= 1
+    
+    def distance(self, other):
+        return abs(self.x - other.x) + abs(self.y - other.y)
     
     def set_building(self, building):
         self.building = building
@@ -41,5 +50,5 @@ class Tile:
         return short
 
     def __str__(self) -> str:
-        return f"Tile: {self.type.name} at ({self.x}, {self.y}) with {sum([[str(res)] for res in self.resources], [])}"
+        return f"{self.type.name} at ({self.x}, {self.y}) with {sum([[str(res)] for res in self.resources], [])}"
     

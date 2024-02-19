@@ -7,7 +7,7 @@ from utility import str_list, str_dict
 
 class Game():
     def __init__(self):
-        self.map = Map(3, 3)
+        self.map = Map(4, 4)
         self.realm = Realm(self.map)
         self.realm.found_city((1,1))
         self.agent = TestAgent(self.realm)
@@ -24,8 +24,7 @@ class Game():
             action.activate(**kwargs)
         
     def loop(self):
-        for city in self.realm.cities:
-            city.tick()
+        self.realm.tick()
         self.tick_agent(self.agent)
         self.tick_game()
 
@@ -34,12 +33,16 @@ class Game():
         self.logger.info(self.realm.info())
         self.logger.info(self.map)
         self.logger.info("-"*50)
-        for i in range(50):
+        for i in range(5):
             self.logger.info(f"Turn {i+1}:")
             self.loop()
             self.logger.info(self.realm.info())
             self.logger.info("-"*50)
         self.logger.info(f"City Tiles: {[str(tile) for tile in self.realm.cities[0].tiles]}")
         self.logger.info(self.map)
+        for tile in self.map.tiles():
+            self.logger.info(f"Tile {tile} costs: {str_list(tile.get_cost(tile.distance(self.realm.cities[0].tile)))}")
         self.logger.info("Game ended")
+    
+
         

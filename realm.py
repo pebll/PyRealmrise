@@ -1,5 +1,6 @@
 from city import City
 from constants import RESSOURCES
+import logging as lg
 
 class Realm:
     def __init__(self, map):
@@ -7,6 +8,7 @@ class Realm:
         self.cities = []
         self.map = map
         self.resources = {str(resource): 0 for resource in RESSOURCES}
+        self.logger = lg.getLogger(self.name.lower())
     
     def found_city(self, pos):
         city = City(self.map, pos, self)
@@ -14,7 +16,23 @@ class Realm:
     
     def get_harvestable_resources(self):
         return sum([city.get_harvestable_resources() for city in self.cities], [])          
-        
+    
+    def tick(self):
+        for city in self.cities:
+            city.tick()
+
+    def can_afford(self, cost):
+        if cost == None:
+            return True
+        return all([self.resources[res] >= cost[res] for res in cost])
+
+    def pay(self, cost):
+        self.logger.info(f"Paying {cost}, {self.resources}")
+        if cost:
+            for res in cost:
+                self.resources[res] -= cost[res]
+            self.logger.info(f"-> {self.resources}")
+
     def info(self):
         info = ""
         info += f"Realm: {self.name}\n"
