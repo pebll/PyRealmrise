@@ -31,7 +31,7 @@ class TestAgent(Agent):
                 if self.realm.can_afford(tile.get_cost(tile.distance(city.tile))):
                     self.logger.info(f"Chose to acquire tile {tile}")
                     self.actions.append((city.actions["acquire_tile"], {"tile": tile}))
-    
+                    return True
     def choose_actions(self):
         self.actions = []
         if not self.choose_pop():

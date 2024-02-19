@@ -14,7 +14,7 @@ class Game():
         self.logger = lg.getLogger("game")
         self.city = self.realm.cities[0]
         for res in self.realm.resources:
-            self.realm.resources[res] = 5
+            self.realm.resources[res] = 3
      
     
     def tick_game(self):
@@ -37,7 +37,7 @@ class Game():
         self.logger.info(self.realm.info())
         self.logger.info(self.map)
         self.logger.info("-"*50)
-        for i in range(20):
+        for i in range(10):
             self.logger.info(f"Turn {i+1}:")
             self.loop()
             self.logger.info(self.realm.info())

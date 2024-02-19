@@ -17,7 +17,7 @@ class City:
         self.actions["increase_pop"] = IncreasePop(self.realm, self)
         self.tiles = []
         self.found(pos)
-        self.pop_costs = [[choice(RESSOURCES) for _ in range((i+1)*2)] for i in range(10)]
+        self.pop_costs = [[choice(RESSOURCES) for _ in range((i+1)*2)] for i in range(20)]
         
 
     def found(self, pos):
