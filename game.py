@@ -21,8 +21,7 @@ class Game():
             if targets:
                 if action == "harvests":
                     for target in targets:
-                        tile, resource = target
-                        realm.harvest(tile, resource)
+                        realm.harvest(target)
     
     def loop(self):
         self.tick_agent(self.agent)

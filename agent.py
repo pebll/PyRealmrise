@@ -15,6 +15,6 @@ class TestAgent(Agent):
     def choose_harvests(self):
         harvestables = self.realm.get_harvestable_resources()
         if harvestables:
-            print(f"Choosing to harvest {harvestables[0][1]} from {harvestables[0][0]}")
+            print(f"Choosing to harvest {harvestables[0].name} from {harvestables[0].tile}")
             return [harvestables[0]]
         return None

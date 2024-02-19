@@ -17,7 +17,7 @@ class City:
         self.tile.set_realm(self.realm)
 
     def get_harvestable_resources(self):
-        return sum([[(tile, res) for res in tile.available_resources()] for tile in self.tiles], [])
+        return sum([[res for res in tile.available_resources()] for tile in self.tiles], [])
 
     def acquire_tile(self, tile):
         self.tiles.append(tile)
