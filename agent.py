@@ -11,14 +11,21 @@ class Agent:
         return None
 
     def choose_actions(self):
-        actions = {}
-        actions["harvests"] = self.choose_harvests()
+        actions = [] # list of all actions the agent wants to take in the form of (action, kwargs)
+        self.choose_harvests()
         return actions
 
 class TestAgent(Agent):
     def choose_harvests(self):
-        harvestables = self.realm.get_harvestable_resources()
-        if harvestables:
-            self.logger.info(f"Choosing to harvest {harvestables[0].name} from {harvestables[0].tile}")
-            return [harvestables[0]]
-        return None
+        for city in self.realm.cities:
+            left_tiles = city.tiles
+            harvests = []
+            for _ in range(city.population):
+                while left_tiles:
+                    tile = left_tiles.pop()
+                    resources = tile.available_resources()
+                    if resources:
+                        harvests.append(resources[0])
+                        break
+            if harvests:
+                self.actions.append((city.harvest_action, {"harvests": harvests}))

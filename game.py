@@ -18,13 +18,11 @@ class Game():
         self.apply_actions(self.realm, actions)
 
     def apply_actions(self, realm, actions):
-        for action, targets in actions.items():
-            if targets:
-                if action == "harvests":
-                    for target in targets:
-                        realm.harvest(target)
-    
+        for action, kwargs in actions:
+            action.activate(kwargs)
+
     def loop(self):
+        # todo tick actions (harvest in city tick)
         self.tick_agent(self.agent)
         self.tick_game()
 

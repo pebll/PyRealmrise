@@ -45,20 +45,21 @@ class Harvest(Action):
     def is_valid(self, harvests):
         left_tiles = self.city.tiles
         if len(harvests) > self.city.population:
-            self.logger.error(f"Not enough population to harvest {harvests}")
+            self.logger.error(f"[INVALID]Not enough population to harvest {harvests}")
             return False
         for resource in harvests:
             if resource.realm != self.city.realm:
-                self.logger.error(f"Resource {resource} does not belong to the realm")
+                self.logger.error(f"[INVALID] Resource {resource} does not belong to the realm")
                 return False
             if resource.countdown > 0:
-                self.logger.error(f"Resource {resource} is not ready to be harvested")
+                self.logger.error(f"[INVALID] Resource {resource} is not ready to be harvested")
                 return False
             if resource.tile not in left_tiles:
-                self.logger.error(f"Resource {resource} already harvested from on {resource.tile}")
+                self.logger.error(f"[INVALID] Resource {resource} already harvested from on {resource.tile}")
                 return False
             else:
                 left_tiles.remove(resource.tile)
+        self.logger.info(f"[VALID] Harvesting {harvests}")
         return True
     
     def resolve(self, harvests):
