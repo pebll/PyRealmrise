@@ -70,19 +70,10 @@ def plot_history(history, keys = None, label = None):
     plt.legend()
     plt.grid(True)
 
-
-def compare_agents(agents, n = 1, mapsize = (5,5), starting_resources = 2, turns = 10, seed = 1):
-    agent_histories = {}
-    for agent in agents:
-        games = run_test_games(n = n, mapsize = mapsize, starting_resources = starting_resources, turns = turns, seed = seed, agent = agent)
-        agent_histories[str(agent)] = average_history(games)
-    for agent, history in agent_histories.items():
-        plot_history(history, keys=["total_population", "total_tiles", "score"])
-    plt.show()
-
 def compare_scenarios(scenarios):
     scenario_histories = {}
-    for scenario in scenarios:
+    for i, scenario in enumerate(scenarios):
+        print(f"Running scenario {i+1}/{len(scenarios)}: {scenario.name}")   
         games = run_test_games(scenario)
         scenario_histories[scenario.name] = average_history(games)
     for scenario, history in scenario_histories.items():

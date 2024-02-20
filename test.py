@@ -1,30 +1,31 @@
 from game import LogGame
 from logging_config import configure_logging
 import logging as lg
-from stats import compare_agents, Scenario, run_test_games, average_history, plot_history, compare_scenarios
+from stats import Scenario, run_test_games, average_history, plot_history, compare_scenarios
 from agent import TestAgent
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 
-
-configure_logging(level=lg.WARNING)
+configure_logging(level=lg.FATAL)
 lg.getLogger('matplotlib').setLevel(lg.WARNING)
 lg.getLogger('PIL').setLevel(lg.WARNING)
+mpl.rcParams['savefig.directory'] = '/home/leo/MEGA/Programmieren/Python/Realmrise/plots'
 
-
-mapsize = 5
+mapsize = 10
 map_size = (mapsize, mapsize)
 starting_resources = 0
-turns = 100
+turns = 150
 seed = 10
-N = 10
-agents = [TestAgent, TestAgent]
+N = 1
 
-scenario1= Scenario(name = "Start Res = 0", n = N, mapsize = map_size, starting_resources = 0, turns = turns, seed = seed, agent = TestAgent)
-scenario2= Scenario(name = "Start Res = 2", n = N, mapsize = map_size, starting_resources = 2, turns = turns, seed = seed, agent = TestAgent)
-scenario3= Scenario(name = "Start Res = 4", n = N, mapsize = map_size, starting_resources = 4, turns = turns, seed = seed, agent = TestAgent)
-scenario4= Scenario(name = "Start Res = 10", n = N, mapsize = map_size, starting_resources = 10, turns = turns, seed = seed, agent = TestAgent)
+#scenario1= Scenario(name = "Start Res = 0", n = N, mapsize = map_size, starting_resources = 0, turns = turns, seed = seed, agent = TestAgent)
 
-scenarios = [scenario1, scenario2, scenario3, scenario4]
+
+scenarios = []
+for i in range(6):
+    scenario = Scenario(name = f"Start Res = {i*20}", n = N, mapsize = map_size, starting_resources = i, turns = turns, seed = seed, agent = TestAgent)
+    scenarios.append(scenario)
+
 compare_scenarios(scenarios)
 
     #games = run_test_games(scenario)
