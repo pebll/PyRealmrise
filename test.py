@@ -12,20 +12,27 @@ lg.getLogger('PIL').setLevel(lg.WARNING)
 
 mpl.rcParams['savefig.directory'] = '/home/leo/MEGA/Programmieren/Python/Realmrise/plots'
 
-mapsize = 5
+mapsize = 10
 map_size = (mapsize, mapsize)
 starting_resources = 0
-turns = 500
+turns = 200
 seed = 5645
-N = 1
-decays = [0.3, 0.5, 0.7]
+N = 20
+decays = [0.1, 0.5, 0.99]
+resources = [0,2,6,10]
+
 
 def compare():
     scenario_random = Scenario(name = f"Agent Random", n = N, mapsize = map_size, starting_resources = starting_resources, turns = turns, seed = seed, agent = BaselineAgent_Random)
-    scenarios = [scenario_random]
-    for i in range(1):
-        scenario = Scenario(name = f"Agent Hardcoded ({decays[i]})", n = N, mapsize = map_size, starting_resources = starting_resources, turns = turns, seed = seed, agent = BaselineAgent_Hardcoded)#, agent_kwargs={"decays" : decays[i]})
-        scenarios.append(scenario)
+    scenarios = []
+   
+    for decay in decays:
+        for resource_count in resources:
+            scenario = Scenario(name = f"Agent Hardcoded ({decay}), res: {resource_count}", n = N, mapsize = map_size, starting_resources = resource_count, turns = turns, seed = seed, agent = BaselineAgent_Hardcoded, agent_kwargs={"decays" : decay})
+            scenarios.append(scenario)
+    for resource_count in resources:
+            scenario = Scenario(name = f"Agent Random, res: {resource_count}", n = N, mapsize = map_size, starting_resources = resource_count, turns = turns, seed = seed, agent = BaselineAgent_Hardcoded)
+            scenarios.append(scenario)     
 
     compare_scenarios(scenarios)
 
