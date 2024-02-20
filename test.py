@@ -14,16 +14,16 @@ mpl.rcParams['savefig.directory'] = '/home/leo/MEGA/Programmieren/Python/Realmri
 
 mapsize = 5
 map_size = (mapsize, mapsize)
-starting_resources = 5
-turns = 10
-seed = 5
-N = 10
+starting_resources = 0
+turns = 500
+seed = 5645
+N = 1
 decays = [0.3, 0.5, 0.7]
 
 def compare():
     scenario_random = Scenario(name = f"Agent Random", n = N, mapsize = map_size, starting_resources = starting_resources, turns = turns, seed = seed, agent = BaselineAgent_Random)
     scenarios = [scenario_random]
-    for i in range(0):
+    for i in range(1):
         scenario = Scenario(name = f"Agent Hardcoded ({decays[i]})", n = N, mapsize = map_size, starting_resources = starting_resources, turns = turns, seed = seed, agent = BaselineAgent_Hardcoded)#, agent_kwargs={"decays" : decays[i]})
         scenarios.append(scenario)
 
