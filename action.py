@@ -36,7 +36,7 @@ class Action:
             self.logger.error(f"[INVALID] Not enough uses left")
             return False
         if not self.realm.can_afford(self.get_cost(**kwargs)):
-            self.logger.error(f"[INVALID] Not enough resources")
+            self.logger.error(f"[INVALID] Not enough resources for {self.get_cost(**kwargs)}")
             return False
         return True
     
@@ -68,7 +68,7 @@ class Harvest(Action):
                 return False
             else:
                 left_tiles.remove(resource.tile)
-        self.logger.info(f"[VALID] Harvesting {str_list(harvests)}")
+        self.logger.info(f"[VALID] Can harvest {str_list(harvests)}")
         return True
     
     def resolve(self, **kwargs):
@@ -97,7 +97,7 @@ class AcquireTile(Action):
         if tile.realm == self.city.realm:
             self.logger.error(f"[INVALID] Tile {tile} already acquired by Realm")
             return False
-        self.logger.info(f"[VALID] Acquiring {tile}")
+        self.logger.info(f"[VALID] Can acquire {tile}")
         return True
     
     def resolve(self, **kwargs):
@@ -118,7 +118,7 @@ class IncreasePop(Action):
             return False
         if super().is_valid() == False:
             return False
-        self.logger.info(f"[VALID] Increasing population")
+        self.logger.info(f"[VALID] Can increase population")
         return True
     
     def resolve(self):

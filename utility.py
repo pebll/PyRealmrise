@@ -1,6 +1,8 @@
 from constants import RESSOURCES
 
 def str_list(l):
+    if not l:
+        return "[]"
     return f"[{', '.join([str(e) for e in l])}]"
 
 def str_dict(d):

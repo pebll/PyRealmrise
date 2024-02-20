@@ -36,19 +36,24 @@ class BaselineAgent_Random(Agent):
     
     def choose_harvests(self):
         for city in self.realm.cities:
-            left_tiles = shuffle(list(city.tiles))
+            left_tiles = list(city.tiles)
+            shuffle(left_tiles)
+            self.logger.info(f"Choosing harvests for {city.name} with {str_list(left_tiles)}")
             harvests = []
             for _ in range(city.population):
                 while left_tiles:
                     tile = left_tiles.pop()
-                    resources = shuffle(tile.available_resources())
+                    resources = tile.available_resources()
+                    shuffle(resources)
                     if resources:
                         harvests.append(resources[0])
                         break
+                if not left_tiles:
+                    self.logger.error(f"No more tiles to harvest from")
             if harvests:
                 self.logger.info(f"Chose to harvest {str_list(harvests)}")
                 self.actions.append((city.actions["harvest"], {"harvests": harvests}))
-
+            
 class BaselineAgent_Hardcoded(BaselineAgent_Random):
     def __init__(self, realm, decay=0.5):
         self.decay = decay

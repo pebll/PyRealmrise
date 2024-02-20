@@ -1,4 +1,4 @@
-from game import TestGame
+from game import TestGame, LogGame
 import matplotlib.pyplot as plt
 import numpy as np
 import random
@@ -32,6 +32,11 @@ class Scenario():
 
 def run_test_game(scenario):
     game = TestGame(**scenario.to_game_config())
+    game.start()
+    return game
+
+def run_log_game(scenario):
+    game = LogGame(**scenario.to_game_config())
     game.start()
     return game
 
