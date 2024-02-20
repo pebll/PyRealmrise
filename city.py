@@ -18,7 +18,7 @@ class City:
         self.actions["increase_pop"] = IncreasePop(self.realm, self)
         self.tiles = []
         self.found(pos)
-        self.pop_costs = [[choice(RESSOURCES) for _ in range((i+1)*2)] for i in range(20)]
+        self.pop_costs = [[choice(RESSOURCES) for _ in range((i+1)*2)] for i in range(30)]
         
 
     def found(self, pos):
@@ -62,7 +62,7 @@ class City:
         self.logger.info(f"Population increased to {self.population}")
     
     def increase_pop_cost(self):
-        return self.pop_costs[self.population-1]
+        return self.pop_costs[(self.population-1)]
     
     def __str__(self):
         return f'{self.name}: {self.population}'

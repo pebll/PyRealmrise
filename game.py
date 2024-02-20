@@ -16,7 +16,7 @@ class Game():
         self.map = Map(mapsize)
         self.max_turns = turns
         self.realm = Realm(self.map)
-        self.realm.found_city((2,2))
+        self.realm.found_city((mapsize[0]//2, mapsize[1]//2))
         self.agent = agent(self.realm)
         self.logger = lg.getLogger("game")
         self.city = self.realm.cities[0]
@@ -40,6 +40,26 @@ class Game():
     def start(self):
         for _ in range(self.max_turns):
             self.loop()
+
+class TestGame(Game):
+    def __init__(self, mapsize=(5, 5), starting_resources=3, turns=10, agent=TestAgent, seed=None):
+        super().__init__(mapsize, starting_resources, turns, agent, seed)
+        history_keys = ["resource_count", "total_population", "total_tiles"]
+        self.history = {key: [] for key in history_keys}
+
+    def loop(self):
+        self.add_history()
+        return super().loop()
+
+    def start(self):
+        super().start()
+        self.add_history()
+
+    def add_history(self):
+        stats = self.realm.get_stats()
+        for key in stats.keys():
+            self.history[key].append(stats[key])
+    
 
 
 class LogGame(Game):

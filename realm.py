@@ -37,6 +37,13 @@ class Realm:
                 self.resources[res] -= cost[res]
             self.logger.info(f"-> {self.resources}")
 
+    def get_stats(self):
+        stats = {}
+        stats["resource_count"] = sum([count for count in self.resources.values()])
+        stats["total_population"] = sum([city.population for city in self.cities])
+        stats["total_tiles"] = sum([len(city.tiles) for city in self.cities])
+        return stats
+    
     def info(self):
         info = ""
         info += f"Realm: {self.name}\n"
