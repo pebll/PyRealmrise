@@ -6,20 +6,21 @@ import random
 SMOOTHNESS = 100  # Adjust the number of points for smoother interpolation
 
 class Scenario():
-    def __init__(self, name = "Scenario", n = 1, mapsize = (5,5), starting_resources = 2, turns = 10, seed = 1, agent = None):
+    def __init__(self, name = "Scenario", n = 1, mapsize = (5,5), starting_resources = 2, turns = 10, seed = 1, agent = None, agent_kwargs = {}):
         self.name = name
         self.mapsize = mapsize
         self.starting_resources = starting_resources
         self.turns = turns
         self.seed = seed
         self.agent = agent
+        self.agent_kwargs = agent_kwargs
         self.n = n
 
     def to_dict(self):
         return {"n":self.n, "mapsize": self.mapsize, "starting_resources": self.starting_resources, "turns": self.turns, "seed": self.seed, "agent": self.agent}
 
     def to_game_config(self):
-        return {"mapsize": self.mapsize, "starting_resources": self.starting_resources, "turns": self.turns, "seed": self.seed, "agent": self.agent}
+        return {"mapsize": self.mapsize, "starting_resources": self.starting_resources, "turns": self.turns, "seed": self.seed, "agent": self.agent, "agent_kwargs": self.agent_kwargs}
     
     def tick_seed(self):
         if self.seed:

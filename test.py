@@ -2,28 +2,28 @@ from game import LogGame
 from logging_config import configure_logging
 import logging as lg
 from stats import Scenario, run_test_games, average_history, plot_history, compare_scenarios
-from agent import TestAgent
+from baselines import BaselineAgent_Random, BaselineAgent_Hardcoded
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-configure_logging(level=lg.FATAL)
+configure_logging(level=lg.DEBUG)
 lg.getLogger('matplotlib').setLevel(lg.WARNING)
 lg.getLogger('PIL').setLevel(lg.WARNING)
+
 mpl.rcParams['savefig.directory'] = '/home/leo/MEGA/Programmieren/Python/Realmrise/plots'
 
-mapsize = 10
+mapsize = 5
 map_size = (mapsize, mapsize)
 starting_resources = 0
-turns = 150
-seed = 10
-N = 1
+turns = 20
+seed = 5
+N = 100
+decays = [0.3, 0.5, 0.7]
 
-#scenario1= Scenario(name = "Start Res = 0", n = N, mapsize = map_size, starting_resources = 0, turns = turns, seed = seed, agent = TestAgent)
-
-
-scenarios = []
-for i in range(6):
-    scenario = Scenario(name = f"Start Res = {i*20}", n = N, mapsize = map_size, starting_resources = i, turns = turns, seed = seed, agent = TestAgent)
+scenario_random = Scenario(name = f"Agent Random", n = N, mapsize = map_size, starting_resources = starting_resources, turns = turns, seed = seed, agent = BaselineAgent_Random)
+scenarios = [scenario_random]
+for i in range(0):
+    scenario = Scenario(name = f"Agent Hardcoded ({decays[i]})", n = N, mapsize = map_size, starting_resources = starting_resources, turns = turns, seed = seed, agent = BaselineAgent_Hardcoded)#, agent_kwargs={"decays" : decays[i]})
     scenarios.append(scenario)
 
 compare_scenarios(scenarios)

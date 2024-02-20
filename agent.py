@@ -1,6 +1,6 @@
 import logging as lg
 from logging_config import configure_logging
-from utility import str_list, to_dict_cost
+from utility import str_list, to_dict_resources
 
 class Agent:
     def __init__(self, realm):
@@ -16,41 +16,10 @@ class Agent:
         self.choose_harvests()
         return self.actions
 
-class TestAgent(Agent):
-
-    def choose_pop(self):
+class UtilityAgent(Agent):
+    def possible_actions(self):
+        actions = []
         for city in self.realm.cities:
-            if self.realm.can_afford(city.increase_pop_cost()):
-                self.logger.info(f"Chose to increase population")
-                self.actions.append((city.actions["increase_pop"], {}))
-                return True
-
-    def choose_tile(self):
-        for city in self.realm.cities:
-            for tile in city.acquirable_tiles():
-                if self.realm.can_afford(tile.get_cost(tile.distance(city.tile))):
-                    self.logger.info(f"Chose to acquire tile {tile}")
-                    self.actions.append((city.actions["acquire_tile"], {"tile": tile}))
-                    return True
-                
-    def choose_actions(self):
-        self.actions = []
-        if not self.choose_pop():
-            self.choose_tile()
-        self.choose_harvests()
-        return self.actions
-    
-    def choose_harvests(self):
-        for city in self.realm.cities:
-            left_tiles = list(city.tiles)
-            harvests = []
-            for _ in range(city.population):
-                while left_tiles:
-                    tile = left_tiles.pop()
-                    resources = tile.available_resources()
-                    if resources:
-                        harvests.append(resources[0])
-                        break
-            if harvests:
-                self.logger.info(f"Chose to harvest {str_list(harvests)}")
-                self.actions.append((city.actions["harvest"], {"harvests": harvests}))
+            for action in city.actions.values():
+                actions.append(action)
+        return actions

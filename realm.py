@@ -1,7 +1,7 @@
 from city import City
 from constants import RESSOURCES
 import logging as lg
-from utility import to_dict_cost
+from utility import to_dict_resources
 
 
 class Realm:
@@ -19,6 +19,14 @@ class Realm:
     def get_harvestable_resources(self):
         return sum([city.get_harvestable_resources() for city in self.cities], [])          
     
+    def get_resource_coverage(self):
+        coverage = to_dict_resources([])
+        for city in self.cities:
+            for tile in city.tiles:
+                for resource in tile.type.resources:
+                    coverage[resource.name] += 1
+        return coverage
+    
     def tick(self):
         for city in self.cities:
             city.tick()
@@ -27,7 +35,7 @@ class Realm:
         if cost == None:
             return True
         if type(cost) == list:
-            cost = to_dict_cost(cost)
+            cost = to_dict_resources(cost)
         return all([self.resources[res] >= cost[res] for res in cost])
 
     def pay(self, cost):

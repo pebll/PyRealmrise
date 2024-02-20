@@ -1,6 +1,6 @@
 import logging as lg
 from logging_config import configure_logging
-from utility import str_list, to_dict_cost
+from utility import str_list, to_dict_resources
 from constants import RESSOURCES
 
 
@@ -85,7 +85,7 @@ class AcquireTile(Action):
     def get_cost(self, **kwargs):
         tile = kwargs["tile"]
         dist = self.city.tile.distance(tile)
-        return to_dict_cost(tile.get_cost(dist))
+        return to_dict_resources(tile.get_cost(dist))
     
     def is_valid(self, **kwargs):
         tile = kwargs["tile"]
@@ -110,7 +110,7 @@ class IncreasePop(Action):
         self.city = city
 
     def get_cost(self):
-        return to_dict_cost(self.city.increase_pop_cost())
+        return to_dict_resources(self.city.increase_pop_cost())
     
     def is_valid(self):
         if self.city.population >= len(self.city.pop_costs):

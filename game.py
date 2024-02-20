@@ -1,13 +1,14 @@
 from map import Map
 from realm import Realm
-from agent import Agent, TestAgent
+from agent import Agent
+from baselines import BaselineAgent_Random
 import logging as lg
 from utility import str_list, str_dict
 import random
 
 
 class Game():
-    def __init__(self, mapsize = (5,5), starting_resources = 3, turns = 10, agent = TestAgent, seed = None):
+    def __init__(self, mapsize = (5,5), starting_resources = 3, turns = 10, agent = BaselineAgent_Random, seed = None, agent_kwargs = {}):
         if not seed:
             self.seed = random.randint(0, 1000000)
         else:
@@ -17,7 +18,7 @@ class Game():
         self.max_turns = turns
         self.realm = Realm(self.map)
         self.realm.found_city((mapsize[0]//2, mapsize[1]//2))
-        self.agent = agent(self.realm)
+        self.agent = agent(self.realm, **agent_kwargs)
         self.logger = lg.getLogger("game")
         self.city = self.realm.cities[0]
         for res in self.realm.resources:
@@ -42,8 +43,8 @@ class Game():
             self.loop()
 
 class TestGame(Game):
-    def __init__(self, mapsize=(5, 5), starting_resources=3, turns=10, agent=TestAgent, seed=None):
-        super().__init__(mapsize, starting_resources, turns, agent, seed)
+    def __init__(self, mapsize=(5, 5), starting_resources=3, turns=10, agent=BaselineAgent_Random, seed=None, agent_kwargs={}):
+        super().__init__(mapsize, starting_resources, turns, agent, seed, agent_kwargs)
         history_keys = ["resource_count", "total_population", "total_tiles", "score"]
         self.history = {key: [] for key in history_keys}
 

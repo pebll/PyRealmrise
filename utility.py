@@ -11,8 +11,15 @@ def str_dict(d):
 
     return f"{{{' ,'.join([f'{str(k)} : {format_value(v)}' for k, v in d.items()])}}}"
 
-def to_dict_cost(cost):
-    return {str(res): cost.count(res) for res in RESSOURCES}
+def to_dict_resources(resources):
+    if resources == None:
+        resources = []
+    return {str(res): resources.count(res) for res in RESSOURCES}
 
-def to_list_cost(cost):
-    return [str(res) for res in cost]
+def add_to_dict_resources(d, resources):
+    for res in resources:
+        d[str(res)] += 1
+    return d
+
+def to_list_cost(resources):
+    return [str(res) for res in resources]
