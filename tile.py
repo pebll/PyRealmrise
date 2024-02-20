@@ -10,16 +10,16 @@ class Tile:
         self.lg = lg.getLogger(f"Tile({pos[0]},{pos[1]})")
         self.pos = pos
         self.map = map
-
-        self.type = type if type else choice(TILE_TYPES)
+        self.rng = self.map.game.rng
+        self.type = type if type else self.rng.choice(TILE_TYPES)
 
         self.resources = self.type.resources
         self.resources = [TileResource(res, self) for res in self.resources]
         self.realm = None
         self.building = None
 
-        self.base_cost = [choice(RESSOURCES) for _ in range(10)]
-        self.special_cost = [choice(self.type.resources) for _ in range(10)]
+        self.base_cost = [self.rng.choice(RESSOURCES) for _ in range(10)]
+        self.special_cost = [self.rng.choice(self.type.resources) for _ in range(10)]
     
     def get_cost(self, distance):
         return self.base_cost[:distance-1] + self.special_cost[:1+distance//3]

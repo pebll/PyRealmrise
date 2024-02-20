@@ -12,8 +12,8 @@ class Game():
             self.seed = random.randint(0, 1000000)
         else:
             self.seed = seed
-        random.seed(self.seed)
-        self.map = Map(mapsize)
+        self.rng = random.Random(self.seed)
+        self.map = Map(mapsize, self)
         self.max_turns = turns
         self.realm = Realm(self.map)
         self.realm.found_city((mapsize[0]//2, mapsize[1]//2))
@@ -44,7 +44,7 @@ class Game():
 class TestGame(Game):
     def __init__(self, mapsize=(5, 5), starting_resources=3, turns=10, agent=TestAgent, seed=None):
         super().__init__(mapsize, starting_resources, turns, agent, seed)
-        history_keys = ["resource_count", "total_population", "total_tiles"]
+        history_keys = ["resource_count", "total_population", "total_tiles", "score"]
         self.history = {key: [] for key in history_keys}
 
     def loop(self):

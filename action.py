@@ -2,7 +2,6 @@ import logging as lg
 from logging_config import configure_logging
 from utility import str_list, to_dict_cost
 from constants import RESSOURCES
-from random import choice
 
 
 class Action:
@@ -114,6 +113,9 @@ class IncreasePop(Action):
         return to_dict_cost(self.city.increase_pop_cost())
     
     def is_valid(self):
+        if self.city.population >= len(self.city.pop_costs):
+            self.logger.error(f"[INVALID] Population already at maximum")
+            return False
         if super().is_valid() == False:
             return False
         self.logger.info(f"[VALID] Increasing population")

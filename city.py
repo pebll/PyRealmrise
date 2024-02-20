@@ -12,13 +12,14 @@ class City:
         self.population = 1
         self.realm = realm
         self.map = map
+        self.rng = self.map.game.rng
         self.actions = {}
         self.actions["harvest"] = Harvest(self.realm, self)
         self.actions["acquire_tile"] = AcquireTile(self.realm, self)
         self.actions["increase_pop"] = IncreasePop(self.realm, self)
         self.tiles = []
         self.found(pos)
-        self.pop_costs = [[choice(RESSOURCES) for _ in range((i+1)*2)] for i in range(30)]
+        self.pop_costs = [[self.rng.choice(RESSOURCES) for _ in range((i+1)*2)] for i in range(20)]
         
 
     def found(self, pos):

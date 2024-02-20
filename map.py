@@ -3,8 +3,9 @@ from typing import Any
 from tile import Tile
 
 class Map:
-    def __init__(self,size):
+    def __init__(self,size, game):
         self.size = size
+        self.game = game
         self.map = [[Tile((x, y), self) for x in range(size[0])] for y in range(size[1])]
     
     def tile(self, pos):

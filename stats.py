@@ -1,16 +1,45 @@
 from game import TestGame
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 SMOOTHNESS = 100  # Adjust the number of points for smoother interpolation
 
-def run_test_game(mapsize = (5,5), starting_resources = 2, turns = 10, seed = 1):
-    game = TestGame(mapsize=mapsize, starting_resources=starting_resources, turns=turns, seed=seed)
+class Scenario():
+    def __init__(self, name = "Scenario", n = 1, mapsize = (5,5), starting_resources = 2, turns = 10, seed = 1, agent = None):
+        self.name = name
+        self.mapsize = mapsize
+        self.starting_resources = starting_resources
+        self.turns = turns
+        self.seed = seed
+        self.agent = agent
+        self.n = n
+
+    def to_dict(self):
+        return {"n":self.n, "mapsize": self.mapsize, "starting_resources": self.starting_resources, "turns": self.turns, "seed": self.seed, "agent": self.agent}
+
+    def to_game_config(self):
+        return {"mapsize": self.mapsize, "starting_resources": self.starting_resources, "turns": self.turns, "seed": self.seed, "agent": self.agent}
+    
+    def tick_seed(self):
+        if self.seed:
+            self.seed += 1
+    
+    def copy(self):
+        return Scenario(n = self.n, mapsize = self.mapsize, starting_resources = self.starting_resources, turns = self.turns, seed = self.seed, agent = self.agent)
+
+
+def run_test_game(scenario):
+    game = TestGame(**scenario.to_game_config())
     game.start()
     return game
 
-def run_test_games(n=10, mapsize = (5,5), starting_resources = 2, turns = 10, seed = 1):
-    games = [run_test_game(mapsize=mapsize, starting_resources=starting_resources, turns=turns, seed=seed+i) for i in range(n)]
+def run_test_games(scenario):
+    scenario = scenario.copy()
+    games = []
+    for _ in range(scenario.n):
+        scenario.tick_seed()
+        games.append(run_test_game(scenario))
     return games
 
 def average_history(games):
@@ -22,17 +51,40 @@ def average_history(games):
         history[key] = [val / len(games) for val in history[key]]
     return history
 
-def plot_history(history, keys = None):
+def plot_history(history, keys = None, label = None):
     if keys:
         history = {key: history[key] for key in keys}
-    for key, values in history.items():
+    if label and len(keys) == 1:
+        values = list(history.values())[0]
         x_smooth = np.linspace(0, len(values) - 1, SMOOTHNESS)
         y_smooth = np.interp(x_smooth, range(len(values)), values)
-        plt.plot(x_smooth, y_smooth, linewidth = 3, label=key)  # Smooth curve with markers
+        plt.plot(x_smooth, y_smooth, linewidth = 3, label=label)
+    else:
+        for key, values in history.items():
+            x_smooth = np.linspace(0, len(values) - 1, SMOOTHNESS)
+            y_smooth = np.interp(x_smooth, range(len(values)), values)
+            plt.plot(x_smooth, y_smooth, linewidth = 3, label=key)  # Smooth curve with markers
     plt.xlabel('Turns')
     plt.ylabel('Values')
     plt.title('Game History')
     plt.legend()
     plt.grid(True)
+
+
+def compare_agents(agents, n = 1, mapsize = (5,5), starting_resources = 2, turns = 10, seed = 1):
+    agent_histories = {}
+    for agent in agents:
+        games = run_test_games(n = n, mapsize = mapsize, starting_resources = starting_resources, turns = turns, seed = seed, agent = agent)
+        agent_histories[str(agent)] = average_history(games)
+    for agent, history in agent_histories.items():
+        plot_history(history, keys=["total_population", "total_tiles", "score"])
     plt.show()
 
+def compare_scenarios(scenarios):
+    scenario_histories = {}
+    for scenario in scenarios:
+        games = run_test_games(scenario)
+        scenario_histories[scenario.name] = average_history(games)
+    for scenario, history in scenario_histories.items():
+        plot_history(history, keys=["score"], label=scenario)
+    plt.show()

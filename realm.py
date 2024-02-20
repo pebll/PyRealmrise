@@ -42,8 +42,15 @@ class Realm:
         stats["resource_count"] = sum([count for count in self.resources.values()])
         stats["total_population"] = sum([city.population for city in self.cities])
         stats["total_tiles"] = sum([len(city.tiles) for city in self.cities])
+        stats["score"] = self.score()
         return stats
     
+    def score(self):
+        res_count = sum([count for count in self.resources.values()])
+        pop_count = sum([city.population for city in self.cities])
+        tile_count = sum([len(city.tiles) for city in self.cities])
+        return pop_count + tile_count/2# + res_count/10
+    10
     def info(self):
         info = ""
         info += f"Realm: {self.name}\n"
