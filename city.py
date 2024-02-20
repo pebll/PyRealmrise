@@ -2,6 +2,7 @@ from action import Harvest, AcquireTile, IncreasePop
 import logging as lg
 from random import choice
 from constants import RESSOURCES
+from utility import str_list
 
 
 class City:
@@ -46,16 +47,15 @@ class City:
         self.logger.info(f"Acquired tile {tile}")
     
     def acquirable_tiles(self):
-        neighbours = []
-        own_tiles = list(self.tiles) + [self.tile]
+        neighbours = set()
+        own_tiles = set(self.tiles) | {self.tile}
+
         for tile in own_tiles:
-            x, y = tile.x, tile.y
-            for neighbour in [self.map.tile((x+1,y)), self.map.tile((x-1,y)), self.map.tile((x,y+1)), self.map.tile((x,y-1))]:
-                if not neighbour:
-                    continue
-                if neighbour.realm != self.realm and neighbour not in neighbours:
-                    neighbours.append(neighbour)
-        return neighbours
+            potential_neighbours = tile.neighbours()
+            for neighbour in set(potential_neighbours):
+                if neighbour.realm != self.realm and neighbour not in own_tiles:
+                    neighbours.add(neighbour)
+        return list(neighbours)
     
     def increase_population(self):
         self.population += 1

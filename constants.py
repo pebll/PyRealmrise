@@ -14,7 +14,7 @@ res_dict = {str(res): res for res in RESSOURCES}
 class TileType:
     def __init__(self, name, resources):
         self.name = name
-        self.short = name[0]
+        self.short = name[0] + name[1].lower()
         self.resources = resources
     
     def __str__(self):
@@ -24,7 +24,7 @@ TILE_TYPES =   [TileType("PLAINS", [res_dict["GRASS"], res_dict["GRASS"]]),
                 TileType("FOREST", [res_dict["WOOD"], res_dict["WOOD"]]),
                 TileType("MOUNTAIN", [res_dict["STONE"], res_dict["STONE"]]),
                 TileType("DESERT", [res_dict["SAND"], res_dict["SAND"]]),
-                TileType("SNOWLANS", [res_dict["SNOW"], res_dict["SNOW"]]),
+                TileType("SNOWLANDS", [res_dict["SNOW"], res_dict["SNOW"]]),
                 TileType("TUNDRA", [res_dict["SNOW"], res_dict["GRASS"]]),
                 TileType("OCEAN", [res_dict["WATER"], res_dict["WATER"]]),
                 TileType("HILLS", [res_dict["GRASS"], res_dict["STONE"]]),

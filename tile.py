@@ -6,10 +6,10 @@ from resources import TileResource
 import logging as lg
 
 class Tile:
-    def __init__(self, x, y, type=None):
-        self.lg = lg.getLogger(f"Tile({x},{y})")
-        self.x = x
-        self.y = y
+    def __init__(self, pos, map, type=None):
+        self.lg = lg.getLogger(f"Tile({pos[0]},{pos[1]})")
+        self.pos = pos
+        self.map = map
 
         self.type = type if type else choice(TILE_TYPES)
 
@@ -32,8 +32,18 @@ class Tile:
             if not res.available():
                 res.cooldown -= 1
     
+    def neighbours(self):
+        x = self.pos[0]
+        y = self.pos[1]
+        return filter(None, [
+            self.map.tile((x + 1, y)),
+            self.map.tile((x - 1, y)),
+            self.map.tile((x, y + 1)),
+            self.map.tile((x, y - 1)),
+        ])
+    
     def distance(self, other):
-        return abs(self.x - other.x) + abs(self.y - other.y)
+        return abs(self.pos[0] - other.pos[0]) + abs(self.pos[1] - other.pos[1])
     
     def set_building(self, building):
         self.building = building
@@ -44,11 +54,11 @@ class Tile:
     def short(self):
         short = f"( {self.type} )"
         if type(self.building) == City:
-            short = " [C] "
+            short = " [Ci] "
         if self.realm:
             short = colored(short, 'blue', attrs=['bold'])
         return short
 
     def __str__(self) -> str:
-        return f"{self.type.name} at ({self.x}, {self.y}) with {sum([[str(res)] for res in self.resources], [])}"
+        return f"{self.type.name} ({self.pos}) with {sum([[str(res)] for res in self.resources], [])}"
     
